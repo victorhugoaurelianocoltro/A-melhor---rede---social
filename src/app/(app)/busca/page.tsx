@@ -3,10 +3,18 @@ import { Header } from "@/components/header"
 import { FeedMasonry } from "@/components/feed-masonry"
 import { Input } from "@/components/ui/input"
 import { mockPins } from "@/mock/pins"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
 export default function SearchPage() {
-  const [q, setQ] = useState("")
+  const searchParams = useSearchParams()
+  const [q, setQ] = useState(() => searchParams.get("q") ?? "")
+
+  useEffect(() => {
+    const value = searchParams.get("q") ?? ""
+    setQ(value)
+  }, [searchParams])
+
   const results = useMemo(() => {
     const query = q.trim().toLowerCase()
     if (!query) return []
